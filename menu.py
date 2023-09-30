@@ -246,6 +246,7 @@ def display_linked_list():
     botao_search_position.pack()
 
     def display_nodes(): 
+            
         for widget in tela.winfo_children():
             widget.destroy()
             
@@ -256,8 +257,8 @@ def display_linked_list():
         head_square.pack(side="left")
 
     # Adiciona uma seta após "HEAD"
-        head_arrow = ttk.Label(tela, text="➡️", font=("Helvetica", 30))
-        head_arrow.pack(side="left")
+        head_arrow = ttk.Label(tela, text="➡", font=("Segoe UI Symbol", 30))
+        head_arrow.pack(side="left", padx=(0,0))
 
         current = ll.head
         while current:
@@ -267,11 +268,12 @@ def display_linked_list():
             square.pack(side="left")
             
             if current.next is not None: # Adiciona a seta apenas se houver um próximo nó.
-                arrow_label = ttk.Label(tela, text="➡️", font=("Helvetica", 30))
-                arrow_label.pack(side="left")
+                arrow_label = ttk.Label(tela, text="➡", font=("Segoe UI Symbol", 30))
+                arrow_label.pack(side="left", padx=(0,0))
                 
             current = current.next
 
+    
     janela.mainloop()
 
 def display_doubly_linked_list():
@@ -382,38 +384,45 @@ def display_doubly_linked_list():
     def display_nodes():
         for widget in tela.winfo_children():
             widget.destroy()
-            # Cria um quadrado para "HEAD"
+        # Cria um quadrado para "HEAD"
         head_square = tk.Canvas(tela, width=60, height=60)
         head_square.create_rectangle(10, 10, 60, 60, fill="blue")
         head_square.create_text(30, 30, text="HEAD", fill="white")
-        head_square.pack(side="left")
+        head_square.pack(side="left", padx=(0,0))
 
-    # Adiciona uma seta após "HEAD"
-        head_arrow = ttk.Label(tela, text="➡️", font=("Arial", 30))
-        head_arrow.pack(side="left")
+        # Adiciona uma seta após "HEAD"
+        head_arrow = ttk.Label(tela, text="➡", font=("Segoe UI Symbol", 30))
+        head_arrow.pack(side="left", padx=(0,0))
 
         current = dll.head
         while current:
             square = tk.Canvas(tela, width=60, height=60)
             square.create_rectangle(10, 10, 60, 60, fill="green")
             square.create_text(30, 30, text=str(current.value), fill="white")
-            square.pack(side="left")
+            square.pack(side="left", padx=(0,0))
             
             if current.next is not None: # Adiciona a seta para o próximo nó.
-                arrow_label = ttk.Label(tela, text="↔️", font=("Helvetica", 50))
-                arrow_label.pack(side="left")
+                arrow_frame = ttk.Frame(tela)
+                arrow_label_right = ttk.Label(arrow_frame, text="→", font=("Segoe UI Symbol", 30))
+                arrow_label_right.pack(side="top", padx=(0,0), pady=(0,0))
+                arrow_label_left = ttk.Label(arrow_frame, text="←", font=("Segoe UI Symbol", 30))
+                arrow_label_left.pack(side="top", padx=(0,0), pady=(0,0))
+                arrow_frame.pack(side="left", padx=(0,0))
 
             current = current.next
-                    
-        head_arrow = ttk.Label(tela, text="⬅️", font=("Arial", 30))
-        head_arrow.pack(side="left")
+
+
+        tail_arrow = ttk.Label(tela, text="⬅", font=("Segoe UI Symbol", 30))
+        tail_arrow.pack(side="left", padx=(0,0))
+
 
         tail_square = tk.Canvas(tela, width=60, height=60)
-        tail_square.create_rectangle(10, 10, 60, 60, fill="light blue")
+        tail_square.create_rectangle(10, 10, 60, 60, fill="blue")
         tail_square.create_text(30, 30, text="TAIL", fill="white")
-        tail_square.pack(side="left")
+        tail_square.pack(side="left", padx=(0,0))
 
-
+    
+        
         janela.mainloop()
 
 def main():
