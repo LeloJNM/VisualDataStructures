@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 from ttkthemes import ThemedTk
-from ls import SequentialList
-from lse import LinkedList
-from lde import DoublyLinkedList
+from sl import SequentialList
+from ll import LinkedList
+from dll import DoublyLinkedList
 
 
 # Define a função display_sequential_list
@@ -141,7 +141,7 @@ def display_sequential_list():
             label_mensageiro.config(text=f"Valor {value} não encontrado!")
 
     # Cria um botão para buscar um valor e associa a função search_value a ele
-    botao_search = ttk.Button(janela, text="Buscar", command=search_value)
+    botao_search = ttk.Button(janela, text="Buscar por valor", command=search_value)
     botao_search.pack()
 
     # Função para buscar um valor em uma posição específica na lista
@@ -227,8 +227,8 @@ def display_linked_list():
             ll.insert(int(value))
             display_nodes()
 
-    # Cria um botão para inserir um valor na lista encadeada
-    botao_insert = ttk.Button(janela, text="Inserir", command=insert_value)
+    # Cria um botão para inserir um valor na última posição lista encadeada
+    botao_insert = ttk.Button(janela, text="Inserir na Ultima", command=insert_value)
     botao_insert.pack()
 
     # Função para inserir um valor em uma posição específica na lista encadeada
@@ -253,7 +253,7 @@ def display_linked_list():
             ll.remove(int(value))
             display_nodes()
 
-    botao_remove = ttk.Button(janela, text="Remover", command=remove_value)
+    botao_remove = ttk.Button(janela, text="Remover por valor", command=remove_value)
     botao_remove.pack()
 
     def remove_at_position():
@@ -279,7 +279,7 @@ def display_linked_list():
         else:
             label_mensageiro.config(text=f"Valor {value} não encontrado!")
 
-    botao_search = ttk.Button(janela, text="Buscar", command=search_value)
+    botao_search = ttk.Button(janela, text="Buscar por valor", command=search_value)
     botao_search.pack()
 
     def search_by_position():
@@ -368,7 +368,7 @@ def display_doubly_linked_list():
             dll.insert(int(value))
             display_nodes()
 
-    botao_insert = ttk.Button(janela, text="Inserir", command=insert_value)
+    botao_insert = ttk.Button(janela, text="Inserir na Ultima", command=insert_value)
     botao_insert.pack()
 
     def insert_at_position():
@@ -393,7 +393,7 @@ def display_doubly_linked_list():
             display_nodes()  # Atualiza a exibição dos nós
 
     # Cria um botão para remover um valor da lista duplamente encadeada
-    botao_remove = ttk.Button(janela, text="Remover", command=remove_value)
+    botao_remove = ttk.Button(janela, text="Remover por valor", command=remove_value)
     botao_remove.pack()
 
     # Função para remover um valor de uma posição específica na lista duplamente encadeada
@@ -423,7 +423,7 @@ def display_doubly_linked_list():
             label_mensageiro.config(text=f"Valor {value} não encontrado!")  # Valor não encontrado
 
     # Cria um botão para buscar um valor na lista duplamente encadeada
-    botao_search = ttk.Button(janela, text="Buscar", command=search_value)
+    botao_search = ttk.Button(janela, text="Buscar por valor", command=search_value)
     botao_search.pack()
 
     # Função para buscar um valor por posição na lista duplamente encadeada
@@ -511,19 +511,19 @@ def main():
     label.pack()
 
     # Cria um botão para exibir a lista sequencial
-    botaoLS = ttk.Button(janela, text="Lista Sequencial", command=display_sequential_list, width=40,
+    botaoSL = ttk.Button(janela, text="Lista Sequencial", command=display_sequential_list, width=40,
                          padding={"sticky": "nswe"})
-    botaoLS.pack()
+    botaoSL.pack()
 
     # Cria um botão para exibir a lista simplesmente encadeada
-    botaoLSE = ttk.Button(janela, text="Lista Simplesmente Encadeada", command=display_linked_list, width=40,
+    botaoLL = ttk.Button(janela, text="Lista Simplesmente Encadeada", command=display_linked_list, width=40,
                           padding={"sticky": "nswe"})
-    botaoLSE.pack()
+    botaoLL.pack()
 
     # Cria um botão para exibir a lista duplamente encadeada
-    botaoLDE = ttk.Button(janela, text="Lista Duplamente Encadeada", command=display_doubly_linked_list, width=40,
+    botaoDLL = ttk.Button(janela, text="Lista Duplamente Encadeada", command=display_doubly_linked_list, width=40,
                           padding={"sticky": "nswe"})
-    botaoLDE.pack()
+    botaoDLL.pack()
 
     # Inicia o loop principal da janela
     janela.mainloop()
