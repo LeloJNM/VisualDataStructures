@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 from ttkthemes import ThemedTk
-from ls import SequentialList
-from lse import LinkedList
-from lde import DoublyLinkedList
+from sl import SequentialList
+from ll import LinkedList
+from dll import DoublyLinkedList
 
 
 # Define a função display_sequential_list
@@ -511,19 +511,19 @@ def main():
     label.pack()
 
     # Cria um botão para exibir a lista sequencial
-    botaoLS = ttk.Button(janela, text="Lista Sequencial", command=display_sequential_list, width=40,
+    botaoSL = ttk.Button(janela, text="Lista Sequencial", command=display_sequential_list, width=40,
                          padding={"sticky": "nswe"})
-    botaoLS.pack()
+    botaoSL.pack()
 
     # Cria um botão para exibir a lista simplesmente encadeada
-    botaoLSE = ttk.Button(janela, text="Lista Simplesmente Encadeada", command=display_linked_list, width=40,
+    botaoLL = ttk.Button(janela, text="Lista Simplesmente Encadeada", command=display_linked_list, width=40,
                           padding={"sticky": "nswe"})
-    botaoLSE.pack()
+    botaoLL.pack()
 
     # Cria um botão para exibir a lista duplamente encadeada
-    botaoLDE = ttk.Button(janela, text="Lista Duplamente Encadeada", command=display_doubly_linked_list, width=40,
+    botaoDLL = ttk.Button(janela, text="Lista Duplamente Encadeada", command=display_doubly_linked_list, width=40,
                           padding={"sticky": "nswe"})
-    botaoLDE.pack()
+    botaoDLL.pack()
 
     # Inicia o loop principal da janela
     janela.mainloop()
