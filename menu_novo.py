@@ -1,12 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import Canvas
 from ttkthemes import ThemedTk
 from sl import SequentialList 
 from ll import LinkedList
 from dll import DoublyLinkedList
 from Pilha import Stack
 from Fila import Queue
-
+from ABP import ArvoreBinariaPesquisa
+from ABP import NoGrafico
 
 # Define a função display_sequential_list
 def display_sequential_list():
@@ -540,7 +542,6 @@ def display_stack():
     pop_button = ttk.Button(janela, text="Pop", command=pop_value)
     pop_button.pack()
     pop_button.place(x=50, y=300)
-    
 
     def peek_value():
         message = stack.peek()
@@ -655,15 +656,110 @@ def display_queue():
         count_label.config(text=f"Número de elementos: {len(queue.queue)}/5.")
 
     janela.mainloop()
+
+
+def display_bst():
+    arvoreBP = ArvoreBinariaPesquisa()
+    
+    janela = ThemedTk(theme="ubuntu")
+    janela.title("Árvore Binária de Pesquisa")
+    janela.geometry("800x800")
+    
+    frame = ttk.Frame(janela)
+    frame.pack()
+    
+    value_label = ttk.Label(janela, text="Valor:")
+    value_label.pack()
+    
+    value_entry = ttk.Entry(janela)
+    value_entry.pack()
+    
+    message_label = ttk.Label(janela)
+    message_label.pack()
+    
+    count_label = ttk.Label(janela)
+    count_label.pack()
+
+    # Cria um canvas para desenhar a árvore
+    canvas = Canvas(janela, width=800, height=800)
+    canvas.pack()
+    
+    def calcula_posicoes(no, profundidade=0, pos_x=400):
+        if no is None:
+            return {}
+        
+        posicoes = {}
+        # Adiciona 100 (em vez de 50) à posição y do nó raiz
+        posicoes[no] = (pos_x, profundidade * 50 + 100)
+
+        # Calcula as posições dos nós filhos com uma profundidade maior e uma posição x ajustada
+        posicoes.update(calcula_posicoes(no.esq, profundidade + 1, pos_x - 50))  # 20 é o espaçamento horizontal entre os nós
+        posicoes.update(calcula_posicoes(no.dir, profundidade + 1, pos_x + 20))
+
+        return posicoes
+
+
+    def desenha_no(no_grafico):
+        x, y = no_grafico.pos_x, no_grafico.pos_y
+        r = no_grafico.raio
+
+        # Desenha o círculo
+        canvas.create_oval(x-r, y-r, x+r, y+r)
+
+        # Desenha o valor do nó
+        canvas.create_text(x, y, text=str(no_grafico.no.conteudo))
+
+    def desenha_linha(no_grafico1, no_grafico2):
+        x1, y1 = no_grafico1.pos_x, no_grafico1.pos_y + no_grafico1.raio
+        x2, y2 = no_grafico2.pos_x, no_grafico2.pos_y - no_grafico2.raio
+
+        canvas.create_line(x1, y1, x2, y2)
+
+    def insere():
+        valor = value_entry.get()
+        if valor:
+            if arvoreBP.insere(int(valor)):
+                message_label.config(text=f"Valor {valor} inserido com sucesso.")
+                # Após inserir um novo nó, redesenhe a árvore
+                desenha_arvore()
+            else:
+                message_label.config(text=f"Valor {valor} já existe na árvore.")
+        else:
+            message_label.config(text="Por favor, insira um valor.")
+        value_entry.delete(0, 'end')
+
+    def desenha_arvore():
+        # Limpa o canvas
+        canvas.delete('all')
+        
+        # Calcula as posições dos nós gráficos
+        posicoes = calcula_posicoes(arvoreBP.raiz)
+        
+        # Cria os nós gráficos e desenha os nós e as linhas de conexão
+        for no, (pos_x, pos_y) in posicoes.items():
+            no_grafico = NoGrafico(no, pos_x, pos_y)
+            desenha_no(no_grafico)
+            if no.esq is not None:
+                desenha_linha(no_grafico, NoGrafico(no.esq, *posicoes[no.esq]))
+            if no.dir is not None:
+                desenha_linha(no_grafico, NoGrafico(no.dir, *posicoes[no.dir]))
+
+
+    insere_button = ttk.Button(janela, text="Inserir", command=insere)
+    insere_button.pack()    
+    insere_button.place(x=50, y=100)
+
+
+    janela.mainloop()        
     
 def main():
     # Cria uma nova janela com o tema "ubuntu"
     janela = ThemedTk(theme="ubuntu")
-    janela.title("Simulador de Listas")  # Define o título da janela
-    janela.geometry("730x300")  # Define o tamanho da janela
+    janela.title("Simulador de Estruturas de Dados")  # Define o título da janela
+    janela.geometry("930x400")  # Define o tamanho da janela
 
     # Cria um rótulo de boas-vindas na janela
-    label = ttk.Label(janela, text='\nBem-vindo ao Simulador de Listas!', font=("Arial", 28), width=30,
+    label = ttk.Label(janela, text='\nBem-vindo ao Simulador de Estruturas de Dados!', font=("Arial", 28), width=40,
                       padding={"sticky": "nswe"}, foreground="dark orange")
     label.pack()
 
@@ -683,14 +779,19 @@ def main():
     botaoLDE.pack()
 
     # Cria um botão para exibir a Pilha
-    botaoPILHA = ttk.Button(janela, text="Pilha", command=display_stack, width=40,
+    botaoPilha = ttk.Button(janela, text="Pilha", command=display_stack, width=40,
                           padding={"sticky": "nswe"})
-    botaoPILHA.pack()
+    botaoPilha.pack()
 
     # Cria um botão para exibir a Fila
-    botaoFILA = ttk.Button(janela, text="Fila", command=display_queue, width=40,
+    botaoFila = ttk.Button(janela, text="Fila", command=display_queue, width=40,
                           padding={"sticky": "nswe"})
-    botaoFILA.pack()
+    botaoFila.pack()
+    
+        # Cria um botão para exibir a Árvore
+    botaoArvore = ttk.Button(janela, text="Árvore Binária de Pesquisa", command=display_bst, width=40,
+                          padding={"sticky": "nswe"})
+    botaoArvore.pack()
 
     # Inicia o loop principal da janela
     janela.mainloop()
