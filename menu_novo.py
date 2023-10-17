@@ -698,7 +698,7 @@ def display_bst():
     pos_ordem_label.place(x=100, y=600)
     
     
-    def calcula_posicoes(no, profundidade=0, pos_x=400):
+    def calcula_posicoes(no, profundidade=0, pos_x=400, espaco=200):
         if no is None:
             return {}
         
@@ -707,8 +707,8 @@ def display_bst():
         posicoes[no] = (pos_x, profundidade * 50 + 100)
 
         # Calcula as posições dos nós filhos com uma profundidade maior e uma posição x ajustada
-        posicoes.update(calcula_posicoes(no.esq, profundidade + 1, pos_x - 50))  # 20 é o espaçamento horizontal entre os nós
-        posicoes.update(calcula_posicoes(no.dir, profundidade + 1, pos_x + 50))
+        posicoes.update(calcula_posicoes(no.esq, profundidade + 1, pos_x - espaco/2, espaco/2))  # 20 é o espaçamento horizontal entre os nós
+        posicoes.update(calcula_posicoes(no.dir, profundidade + 1, pos_x + espaco/2, espaco/2))
         
         return posicoes
 
