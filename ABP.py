@@ -26,7 +26,7 @@ class No:
     
     @esq.setter
     def esq(self, esq):
-        self._raiz = esq
+        self._esq = esq  # Corrigido aqui
     
 
 class ArvoreBinariaPesquisa:
@@ -55,7 +55,7 @@ class ArvoreBinariaPesquisa:
             return self.busca(no_t.esq, valor)
         else:
             return self.busca(no_t.dir, valor)
-   
+
     def busca(self, valor):
         return self._busca(self.raiz, valor)
 
@@ -67,33 +67,33 @@ class ArvoreBinariaPesquisa:
         else:
             return self._busca(no.dir, valor)
         
-    def exibe(self, no_t):
-        if no_t is not None:
-            self.exibe(no_t.esq)
-            print(f" {no_t.conteudo}")
-            self.exibe(no_t.dir)
-
     def exibe(self):
         if self.raiz is None:
             print("Árvore vazia")
             pass
         else:
-            self.exibe(self._raiz)
+            self._exibe(self.raiz)
             pass
 
-    def exibe_dec(self, no_t):
+    def _exibe(self, no_t):  # Método auxiliar _exibe
         if no_t is not None:
-            self.exibe_dec(no_t.dir)
+            self._exibe(no_t.esq)
             print(f" {no_t.conteudo}")
-            self.exibe_dec(no_t.dir)
+            self._exibe(no_t.dir)
 
     def exibe_dec(self):
         if self.raiz is None:
             print("Árvore vazia")
             pass
         else:
-            self.exibe_dec(self._raiz)
-            pass         
+            self._exibe_dec(self.raiz)
+            pass
+
+    def _exibe_dec(self, no_t):  # Método auxiliar _exibe_dec
+        if no_t is not None:
+            self._exibe_dec(no_t.dir)
+            print(f" {no_t.conteudo}")
+            self._exibe_dec(no_t.esq)    
 
     def insere(self, valor):
         novo_no = No()
@@ -158,12 +158,44 @@ class ArvoreBinariaPesquisa:
             current = current.esq
         return current
     
-    def pre_ordem(self, no):
+    def pre_ordem(self):
+        if self.raiz is None:
+            return "Árvore vazia"
+        else:
+            return self._pre_ordem(self.raiz, "")[:-2]
+
+    def _pre_ordem(self, no, result):
         if no is not None:
-            print(no.conteudo)
-            self.pre_ordem(no.esq)
-            self.pre_ordem(no.dir)
+            result += str(no.conteudo) + ", "
+            result = self._pre_ordem(no.esq, result)
+            result = self._pre_ordem(no.dir, result)
+        return result
     
+    def in_ordem(self):
+        if self.raiz is None:
+            return "Árvore vazia"
+        else:
+            return self._in_ordem(self.raiz, "")[:-2]
+
+    def _in_ordem(self, no, result):
+        if no is not None:
+            result = self._in_ordem(no.esq, result)
+            result += str(no.conteudo) + ", "
+            result = self._in_ordem(no.dir, result)
+        return result
+    
+    def pos_ordem(self):
+        if self.raiz is None:
+            return "Árvore vazia"
+        else:
+            return self._pos_ordem(self.raiz, "")[:-2]
+
+    def _pos_ordem(self, no, result):
+        if no is not None:
+            result = self._pos_ordem(no.esq, result)
+            result = self._pos_ordem(no.dir, result)
+            result += str(no.conteudo) + ", "
+        return result
     
     
 class NoGrafico:

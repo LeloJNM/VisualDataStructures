@@ -685,8 +685,18 @@ def display_bst():
     canvas = Canvas(janela, width=800, height=800)
     canvas.pack()
     
-    pre_ordem_label = ttk.Label(janela, text="")
+    pre_ordem_label = ttk.Label(janela)
     pre_ordem_label.pack()
+    pre_ordem_label.place(x=100, y=400)
+    
+    in_ordem_label = ttk.Label(janela)
+    in_ordem_label.pack()
+    in_ordem_label.place(x=100, y=500)
+
+    pos_ordem_label = ttk.Label(janela)
+    pos_ordem_label.pack()
+    pos_ordem_label.place(x=100, y=600)
+    
     
     def calcula_posicoes(no, profundidade=0, pos_x=400):
         if no is None:
@@ -697,9 +707,9 @@ def display_bst():
         posicoes[no] = (pos_x, profundidade * 50 + 100)
 
         # Calcula as posições dos nós filhos com uma profundidade maior e uma posição x ajustada
-        posicoes.update(calcula_posicoes(no.esq, profundidade + 1, pos_x - 50))  # Move os nós à esquerda
-        posicoes.update(calcula_posicoes(no.dir, profundidade + 1, pos_x + 50))  # Move os nós à direita
-
+        posicoes.update(calcula_posicoes(no.esq, profundidade + 1, pos_x - 50))  # 20 é o espaçamento horizontal entre os nós
+        posicoes.update(calcula_posicoes(no.dir, profundidade + 1, pos_x + 50))
+        
         return posicoes
 
 
@@ -762,16 +772,6 @@ def display_bst():
                 message_label.config(text="Por favor, insira um valor.")
             value_entry.delete(0, 'end')
             
-    def pre_ordem(no):
-        if no is not None:
-            pre_ordem_label['text'] += str(no.conteudo) + ' '
-            pre_ordem(no.esq)
-            pre_ordem(no.dir)
-    
-    def pre_ordem_button_click():
-        # Limpa o widget Label antes de exibir o novo resultado
-        pre_ordem_label['text'] = ""
-        pre_ordem(arvoreBP.raiz)
         
     def busca():
         valor = value_entry.get()
@@ -785,10 +785,15 @@ def display_bst():
             message_label.config(text="Por favor, insira um valor.")
         value_entry.delete(0, 'end')
 
+    def atualiza_pre_ordem():
+        pre_ordem_label.config(text="Pré-ordem: " + arvoreBP.pre_ordem())
+        
+    def atualiza_in_ordem():
+        in_ordem_label.config(text="In-ordem: " + arvoreBP.in_ordem())
 
-    pre_ordem_button = ttk.Button(janela, text="Pré-Ordem", command=pre_ordem_button_click)
-    pre_ordem_button.pack()    
-    pre_ordem_button.place(x=50, y=160)
+    def atualiza_pos_ordem():
+        pos_ordem_label.config(text="Pós-ordem: " + arvoreBP.pos_ordem())
+
 
     insere_button = ttk.Button(janela, text="Inserir", command=insere)
     insere_button.pack()    
@@ -800,7 +805,19 @@ def display_bst():
     
     busca_button = ttk.Button(janela, text="Buscar", command=busca)
     busca_button.pack()    
-    busca_button.place(x=50, y=190)    
+    busca_button.place(x=50, y=160)    
+    
+    pre_ordem_button = ttk.Button(janela, text="Pré-ordem", command=atualiza_pre_ordem)
+    pre_ordem_button.pack()    
+    pre_ordem_button.place(x=50, y=190)
+    
+    in_ordem_button = ttk.Button(janela, text="In-ordem", command=atualiza_in_ordem)
+    in_ordem_button.pack()    
+    in_ordem_button.place(x=50, y=220)
+    
+    pos_ordem_button = ttk.Button(janela, text="Pós-ordem", command=atualiza_pos_ordem)
+    pos_ordem_button.pack()    
+    pos_ordem_button.place(x=50, y=250)
 
     janela.mainloop()        
     
