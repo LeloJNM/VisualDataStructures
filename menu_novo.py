@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import Canvas
+from tkinter import Text
 from ttkthemes import ThemedTk
 from sl import SequentialList 
 from ll import LinkedList
@@ -684,6 +685,9 @@ def display_bst():
     canvas = Canvas(janela, width=800, height=800)
     canvas.pack()
     
+    pre_ordem_label = ttk.Label(janela, text="")
+    pre_ordem_label.pack()
+    
     def calcula_posicoes(no, profundidade=0, pos_x=400):
         if no is None:
             return {}
@@ -693,8 +697,8 @@ def display_bst():
         posicoes[no] = (pos_x, profundidade * 50 + 100)
 
         # Calcula as posições dos nós filhos com uma profundidade maior e uma posição x ajustada
-        posicoes.update(calcula_posicoes(no.esq, profundidade + 1, pos_x - 50))  # 20 é o espaçamento horizontal entre os nós
-        posicoes.update(calcula_posicoes(no.dir, profundidade + 1, pos_x + 20))
+        posicoes.update(calcula_posicoes(no.esq, profundidade + 1, pos_x - 50))  # Move os nós à esquerda
+        posicoes.update(calcula_posicoes(no.dir, profundidade + 1, pos_x + 50))  # Move os nós à direita
 
         return posicoes
 
@@ -729,7 +733,7 @@ def display_bst():
         value_entry.delete(0, 'end')
 
     def desenha_arvore():
-        # Limpa o canvas
+    # Limpa o canvas
         canvas.delete('all')
         
         # Calcula as posições dos nós gráficos
@@ -739,16 +743,64 @@ def display_bst():
         for no, (pos_x, pos_y) in posicoes.items():
             no_grafico = NoGrafico(no, pos_x, pos_y)
             desenha_no(no_grafico)
-            if no.esq is not None:
+            if no.esq is not None and no.esq in posicoes:
                 desenha_linha(no_grafico, NoGrafico(no.esq, *posicoes[no.esq]))
-            if no.dir is not None:
+            if no.dir is not None and no.dir in posicoes:
                 desenha_linha(no_grafico, NoGrafico(no.dir, *posicoes[no.dir]))
 
+
+    def remove():
+            valor = value_entry.get()
+            if valor:
+                if arvoreBP.remove(int(valor)):
+                    message_label.config(text=f"Valor {valor} removido com sucesso.")
+                    # Após remover um nó, redesenhe a árvore
+                    desenha_arvore()
+                else:
+                    message_label.config(text=f"Valor {valor} não encontrado na árvore.")
+            else:
+                message_label.config(text="Por favor, insira um valor.")
+            value_entry.delete(0, 'end')
+            
+    def pre_ordem(no):
+        if no is not None:
+            pre_ordem_label['text'] += str(no.conteudo) + ' '
+            pre_ordem(no.esq)
+            pre_ordem(no.dir)
+    
+    def pre_ordem_button_click():
+        # Limpa o widget Label antes de exibir o novo resultado
+        pre_ordem_label['text'] = ""
+        pre_ordem(arvoreBP.raiz)
+        
+    def busca():
+        valor = value_entry.get()
+        if valor:
+            no = arvoreBP.busca(int(valor))
+            if no is not None:
+                message_label.config(text=f"Valor {valor} encontrado na árvore.")
+            else:
+                message_label.config(text=f"Valor {valor} não encontrado na árvore.")
+        else:
+            message_label.config(text="Por favor, insira um valor.")
+        value_entry.delete(0, 'end')
+
+
+    pre_ordem_button = ttk.Button(janela, text="Pré-Ordem", command=pre_ordem_button_click)
+    pre_ordem_button.pack()    
+    pre_ordem_button.place(x=50, y=160)
 
     insere_button = ttk.Button(janela, text="Inserir", command=insere)
     insere_button.pack()    
     insere_button.place(x=50, y=100)
 
+    remove_button = ttk.Button(janela, text="Remover", command=remove)
+    remove_button.pack()    
+    remove_button.place(x=50, y=130)
+    
+    busca_button = ttk.Button(janela, text="Buscar", command=busca)
+    busca_button.pack()    
+    busca_button.place(x=50, y=190)    
 
     janela.mainloop()        
     

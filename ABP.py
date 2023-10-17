@@ -55,25 +55,18 @@ class ArvoreBinariaPesquisa:
             return self.busca(no_t.esq, valor)
         else:
             return self.busca(no_t.dir, valor)
-        
+   
     def busca(self, valor):
-        return self.busca(self.raiz, valor)
-    
-    def busca_iterativa(self, valor):
-        if self.vazia():
-            return None
+        return self._busca(self.raiz, valor)
+
+    def _busca(self, no, valor):
+        if no is None or no.conteudo == valor:
+            return no
+        if valor < no.conteudo:
+            return self._busca(no.esq, valor)
+        else:
+            return self._busca(no.dir, valor)
         
-        no_aux = self.raiz
-        while no_aux is not None:
-            if no_aux.conteudo == valor:
-                return no_aux
-            elif no_aux.conteudo > valor:
-                no_aux = no_aux.esq
-            else:
-                no_aux = no_aux.dir
-        
-        return None
-    
     def exibe(self, no_t):
         if no_t is not None:
             self.exibe(no_t.esq)
@@ -125,13 +118,53 @@ class ArvoreBinariaPesquisa:
                 no_aux = no_aux.esq
             else:
                 no_aux = no_aux.dir
-            
+
+        # Fora do loop while
         if valor < no_p.conteudo:
             no_p.esq = novo_no
         else:
             no_p.dir = novo_no
-            
+        
         return True
+
+    
+    def remove(self, valor):
+        self.raiz, removed = self._remove(self.raiz, valor)
+        return removed
+
+    def _remove(self, no, valor):
+        if no is None:
+            return no, False
+
+        if valor < no.conteudo:
+            no.esq, removed = self._remove(no.esq, valor)
+        elif valor > no.conteudo:
+            no.dir, removed = self._remove(no.dir, valor)
+        else:
+            if no.esq is None:
+                return no.dir, True
+            elif no.dir is None:
+                return no.esq, True
+            else:
+                temp = self._minValueNode(no.dir)
+                no.conteudo = temp.conteudo
+                no.dir, _ = self._remove(no.dir, temp.conteudo)
+                removed = True
+        return no, removed
+
+    def _minValueNode(self, no):
+        current = no
+        while(current.esq is not None):
+            current = current.esq
+        return current
+    
+    def pre_ordem(self, no):
+        if no is not None:
+            print(no.conteudo)
+            self.pre_ordem(no.esq)
+            self.pre_ordem(no.dir)
+    
+    
     
 class NoGrafico:
         def __init__(self, no, pos_x, pos_y):
