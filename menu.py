@@ -6,8 +6,8 @@ from ttkthemes import ThemedTk
 from sl import SequentialList 
 from ll import LinkedList
 from dll import DoublyLinkedList
-from Pilha import Stack
-from Fila import Queue
+from stack import Stack
+from queuefifo import Queue
 from ABP import ArvoreBinariaPesquisa
 from ABP import NoGrafico
 
@@ -603,35 +603,36 @@ def display_queue():
     count_label = ttk.Label(janela)
     count_label.pack()
 
-    def enqueue_front_value():
+    def enqueue_back_value():
         value = value_entry.get()
-        message = queue.enqueue_front(value)
+        message = queue.enqueue_back(value)
         message_label.config(text=message)
         display_elements()
 
-    enqueue_front_button = ttk.Button(janela, text="Adicionar no início", command=enqueue_front_value, x=100,y=100)
-    enqueue_front_button.pack()
+    enqueue_back_button = ttk.Button(janela, text="Adicionar", command=enqueue_back_value)
+    enqueue_back_button.pack()
 
-    def dequeue_back_value():
-        message = queue.dequeue_back()
+    def dequeue_front_value():
+        message = queue.dequeue_front()
         message_label.config(text=message)
         display_elements()
 
-    dequeue_back_button = ttk.Button(janela, text="Remover do final", command=dequeue_back_value)
-    dequeue_back_button.pack()
+    dequeue_front_button = ttk.Button(janela, text="Remover", command=dequeue_front_value)
+    dequeue_front_button.pack()
+
 
     def first_value():
         message = queue.first()
-        message_label.config(text=f"Primeiro elemento da fila: {message}.")
+        message_label.config(text=message)
 
-    first_button = ttk.Button(janela, text="Primeiro da fila", command=first_value)
+    first_button = ttk.Button(janela, text="Primeiro", command=first_value)
     first_button.pack()
 
     def last_value():
         message = queue.last()
-        message_label.config(text=f"Último elemento da fila: {message}.")
+        message_label.config(text=message)
 
-    last_button = ttk.Button(janela, text="Último da fila", command=last_value)
+    last_button = ttk.Button(janela, text="Último", command=last_value)
     last_button.pack()
 
     def display_elements():
@@ -640,7 +641,7 @@ def display_queue():
 
         for i in range(len(queue.queue)):
             square = tk.Canvas(frame, width=60, height=60)
-            square.create_rectangle(10, 10, 60, 60, fill="magenta")
+            square.create_rectangle(10, 10, 60, 60, fill="dark orange")
             square.create_text(30, 30, text=str(queue.queue[i]), fill="white")
             square.pack(side='left')
 
@@ -651,7 +652,6 @@ def display_queue():
         count_label.config(text=f"Número de elementos: {len(queue.queue)}/10.")
 
     janela.mainloop()
-
 
 def display_bst():
     arvoreBP = ArvoreBinariaPesquisa()
