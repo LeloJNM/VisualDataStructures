@@ -8,8 +8,8 @@ from ll import LinkedList
 from dll import DoublyLinkedList
 from stack import Stack
 from queuefifo import Queue
-from ABP import ArvoreBinariaPesquisa
-from ABP import NoGrafico
+from bst import ArvoreBinariaPesquisa
+from bst import NoGrafico
 
 # Define a função display_sequential_list
 def display_sequential_list():
