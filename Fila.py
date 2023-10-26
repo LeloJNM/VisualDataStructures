@@ -1,16 +1,17 @@
 class Queue:
     def __init__(self):
         self.queue = []
+        self.max_size = 10
 
     def enqueue_front(self, item):
-        if len(self.queue) < 5:
+        if len(self.queue) < self.max_size:
             self.queue.insert(0, item)
             return "Item adicionado no início!"
         else:
             return "A fila está cheia!"
 
     def enqueue_back(self, item):
-        if len(self.queue) < 5:
+        if len(self.queue) < self.max_size:
             self.queue.append(item)
             return "Item adicionado no final!"
         else:
@@ -18,13 +19,13 @@ class Queue:
 
     def dequeue_front(self):
         if len(self.queue) > 0:
-            return f"Item removido do início: {self.queue.pop(0)}"
+            return f"Item removido do início: {self.queue.pop(0)}."
         else:
             return "A fila está vazia!"
 
     def dequeue_back(self):
         if len(self.queue) > 0:
-            return f"Item removido do final: {self.queue.pop()}"
+            return f"Item removido do final: {self.queue.pop()}."
         else:
             return "A fila está vazia!"
 
