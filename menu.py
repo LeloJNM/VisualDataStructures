@@ -1,3 +1,4 @@
+import time
 import tkinter as tk
 from tkinter import ttk
 from tkinter import Canvas
@@ -707,16 +708,17 @@ def display_bst():
         return posicoes
 
 
-    def desenha_no(no_grafico):
+    def desenha_no(no_grafico, cor="white"):
         x, y = no_grafico.pos_x, no_grafico.pos_y
         r = no_grafico.raio
 
-        # Desenha o círculo
-        canvas.create_oval(x-r, y-r, x+r, y+r)
+        # Desenha o círculo com a cor especificada e uma borda preta
+        canvas.create_oval(x-r, y-r, x+r, y+r, fill=cor, outline="black")
 
         # Desenha o valor do nó
         canvas.create_text(x, y, text=str(no_grafico.no.conteudo))
-        
+
+
     def desenha_linha(no_grafico1, no_grafico2):
         x1, y1 = no_grafico1.pos_x, no_grafico1.pos_y + no_grafico1.raio
         x2, y2 = no_grafico2.pos_x, no_grafico2.pos_y - no_grafico2.raio
@@ -785,6 +787,19 @@ def display_bst():
             vazia = arvoreBP.vazia()
             if no is not None:
                 message_label.config(text=f"Valor {int(valor)} encontrado na árvore.")
+                
+                # Recalcula as posições dos nós gráficos
+                posicoes = calcula_posicoes(arvoreBP.raiz)
+                
+                # Destaca o nó encontrado
+                no_grafico = NoGrafico(no, posicoes[no][0], posicoes[no][1])
+                desenha_no(no_grafico, "light green")
+                janela.update()
+                time.sleep(5)
+                
+                # Redesenha a árvore para remover o destaque
+                desenha_arvore()
+                
             elif vazia:
                 message_label.config(text=f"Árvore vazia.")
             else:
@@ -793,14 +808,58 @@ def display_bst():
             message_label.config(text="Por favor, insira um valor.")
         value_entry.delete(0, 'end')
 
+
     def atualiza_pre_ordem():
-        pre_ordem_label.config(text="Pré-ordem: " + arvoreBP.pre_ordem())
+        pre_ordem_label.place(x=60, y=450)
+        pre_ordem_label.config(text="Pré-ordem: " + arvoreBP.pre_ordem() + ".")
         
+        # Calcula as posições dos nós gráficos
+        posicoes = calcula_posicoes(arvoreBP.raiz)
+        
+        # Cria os nós gráficos e desenha os nós e as linhas de conexão
+        for no in arvoreBP.pre_ordem().split(", "):
+            no_grafico = NoGrafico(arvoreBP.busca(int(no)), *posicoes[arvoreBP.busca(int(no))])
+            desenha_no(no_grafico, "light green")
+            janela.update()
+            time.sleep(1)
+            
+            # Redesenha a árvore para remover o destaque
+            desenha_arvore()
+
+    
     def atualiza_in_ordem():
-        in_ordem_label.config(text="In-ordem: " + arvoreBP.in_ordem())
+        in_ordem_label.place(x=60, y=500)
+        in_ordem_label.config(text="In-ordem: " + arvoreBP.in_ordem() + ".")
+        
+        # Calcula as posições dos nós gráficos
+        posicoes = calcula_posicoes(arvoreBP.raiz)
+        
+        # Cria os nós gráficos e desenha os nós e as linhas de conexão
+        for no in arvoreBP.in_ordem().split(", "):
+            no_grafico = NoGrafico(arvoreBP.busca(int(no)), posicoes[arvoreBP.busca(int(no))][0], posicoes[arvoreBP.busca(int(no))][1])
+            desenha_no(no_grafico, "light blue")
+            janela.update()
+            time.sleep(1)
+            
+            # Redesenha a árvore para remover o destaque
+            desenha_arvore()
 
     def atualiza_pos_ordem():
-        pos_ordem_label.config(text="Pós-ordem: " + arvoreBP.pos_ordem())
+        pos_ordem_label.place(x=60, y=550)
+        pos_ordem_label.config(text="Pós-ordem: " + arvoreBP.pos_ordem() + ".")
+        
+        # Calcula as posições dos nós gráficos
+        posicoes = calcula_posicoes(arvoreBP.raiz)
+        
+        # Cria os nós gráficos e desenha os nós e as linhas de conexão
+        for no in arvoreBP.pos_ordem().split(", "):
+            no_grafico = NoGrafico(arvoreBP.busca(int(no)), posicoes[arvoreBP.busca(int(no))][0], posicoes[arvoreBP.busca(int(no))][1])
+            desenha_no(no_grafico, "red")
+            janela.update()
+            time.sleep(1)
+            
+            # Redesenha a árvore para remover o destaque
+            desenha_arvore()
 
 
     insere_button = ttk.Button(janela, text="Inserir", command=insere)
@@ -828,7 +887,8 @@ def display_bst():
     pos_ordem_button.place(x=50, y=180)
 
     janela.mainloop()        
-    
+
+
 def main():
     # Cria uma nova janela com o tema "ubuntu"
     janela = ThemedTk(theme="ubuntu")
